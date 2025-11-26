@@ -4,15 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bangkok Trip Nov 2025</title>
+    <meta name="description" content="Bangkok Itinerary for November 2025">
     
-    <!-- 引入 React 和 ReactDOM -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    
-    <!-- 引入 Babel 用於解析 JSX -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
-    <!-- 引入 Tailwind CSS -->
+    <!-- 引入 Tailwind CSS (樣式庫) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- 引入 Google Fonts -->
@@ -21,6 +15,8 @@
     <style>
         body {
             font-family: 'Noto Sans TC', sans-serif;
+            /* 防止 iOS 點擊高亮 */
+            -webkit-tap-highlight-color: transparent;
         }
         h1, h2, h3, .font-serif {
             font-family: 'Playfair Display', 'Noto Serif TC', serif;
@@ -36,64 +32,122 @@
             background-color: rgba(217, 119, 6, 0.5); 
             border-radius: 20px;
         }
+        /* 動畫效果 */
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .scale-click:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
-<body class="bg-amber-50">
-    <div id="root"></div>
+<body class="bg-amber-50 min-h-screen pb-20 selection:bg-amber-200">
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+    <!-- Header Image Section -->
+    <div class="relative w-full h-72 md:h-96 overflow-hidden shadow-2xl bg-gray-900 border-b-4 border-amber-400">
+        <div class="absolute inset-0 flex items-center justify-center">
+            <!-- 圖片處理：加入 onerror 事件處理 -->
+            <img 
+                id="header-img"
+                src="image.png" 
+                alt="Bangkok Trip DM" 
+                class="w-full h-full object-contain opacity-95 transition-transform duration-700 hover:scale-105"
+                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1563492065599-3520f775eeed?q=80&w=1000&auto=format&fit=crop'; this.className='w-full h-full object-cover opacity-90';"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+        </div>
+        
+        <div class="absolute bottom-8 left-0 right-0 text-center px-4">
+            <h1 class="text-3xl md:text-5xl font-serif font-bold leading-tight drop-shadow-lg text-amber-100 tracking-wider">
+                <span class="block text-sm md:text-base text-amber-300 uppercase tracking-[0.3em] mb-2 font-sans">Amazing Thailand</span>
+                Bangkok Trip
+                <span class="block text-xl md:text-3xl mt-2 text-amber-400">November 2025</span>
+            </h1>
+        </div>
+    </div>
 
-        // --- 內建 Icon 組件 (為了單檔執行，不依賴外部庫) ---
-        const IconBase = ({ children, size = 20, className = "" }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                {children}
-            </svg>
-        );
+    <!-- Navigation Tabs -->
+    <div class="sticky top-0 z-50 bg-amber-50/95 backdrop-blur-md shadow-md border-b border-amber-200">
+        <div class="flex justify-center p-3 gap-6 max-w-md mx-auto">
+            <button id="tab-1129" onclick="switchTab('11/29')" class="flex-1 py-2 px-4 rounded-full font-serif font-bold text-lg transition-all duration-300 border-2 bg-purple-900 border-amber-400 text-amber-100 shadow-lg shadow-purple-900/40 transform scale-105">
+                11/29
+            </button>
+            <button id="tab-1130" onclick="switchTab('11/30')" class="flex-1 py-2 px-4 rounded-full font-serif font-bold text-lg transition-all duration-300 border-2 bg-white border-amber-100 text-amber-800 hover:bg-amber-100 hover:border-amber-300">
+                11/30
+            </button>
+        </div>
+    </div>
 
-        const Clock = (props) => (
-            <IconBase {...props}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></IconBase>
-        );
-        const MapPin = (props) => (
-            <IconBase {...props}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></IconBase>
-        );
-        const Navigation = (props) => (
-            <IconBase {...props}><polygon points="3 11 22 2 13 21 11 13 3 11"/></IconBase>
-        );
-        const Utensils = (props) => (
-            <IconBase {...props}><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></IconBase>
-        );
-        const Coffee = (props) => (
-            <IconBase {...props}><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></IconBase>
-        );
-        const Camera = (props) => (
-            <IconBase {...props}><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></IconBase>
-        );
-        const Music = (props) => (
-            <IconBase {...props}><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></IconBase>
-        );
-        const ShoppingBag = (props) => (
-            <IconBase {...props}><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></IconBase>
-        );
-        const Moon = (props) => (
-            <IconBase {...props}><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></IconBase>
-        );
-        const AlertCircle = (props) => (
-            <IconBase {...props}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></IconBase>
-        );
-        const Check = (props) => (
-            <IconBase {...props}><polyline points="20 6 9 17 4 12"/></IconBase>
-        );
+    <!-- Main Content Container -->
+    <div id="itinerary-container" class="max-w-2xl mx-auto px-4 mt-8 space-y-8">
+        <!-- Javascript will inject content here -->
+    </div>
 
+    <script>
+        // --- 資料設定 ---
+        const itineraryData = {
+            '11/29': [
+                { time: "09:00 - 09:30", title: "崖差蒙空寺 Wat Yai Chai Mongkhon", type: "culture", icon: "camera", location: "Wat Yai Chai Mongkhon Ayutthaya", desc: "大城府最古老的寺廟之一，必看巨大臥佛。" },
+                { time: "09:45 - 10:30", title: "瑪哈泰寺 Wat Mahathat", type: "culture", icon: "camera", location: "Wat Mahathat Ayutthaya", desc: "著名的「樹中佛頭」所在地。" },
+                { time: "10:40 - 11:45", title: "巴萊船面 Palek Boat Noodles", type: "food", icon: "utensils", location: "Pa Lek Boat Noodle Ayutthaya", desc: "ก๋วยเตี๋ยวเรือป้าเล็กเจ้าเก่า - 當地老字號船麵。" },
+                { time: "12:30 - 13:00", title: "SYAMA Cafe", type: "cafe", icon: "coffee", location: "SYAMA AYUDHYA", desc: "河畔景觀咖啡廳，適合休息拍照。" },
+                { time: "13:30 - 14:30", title: "Kung Phuean Praew", type: "food", icon: "utensils", location: "Kung Phuean Praew Ayutthaya", desc: "享受大城著名的烤蝦料理。" },
+                { time: "15:00 - 17:00", title: "柴瓦塔那蘭寺 Wat Chaiwatthanaram", type: "culture", icon: "camera", location: "Wat Chaiwatthanaram Ayutthaya", desc: "🔥 Dress Code: 泰服體驗。夕陽最美，酷似吳哥窟。" },
+                { time: "17:00", title: "Back to Bangkok", type: "travel", icon: "navigation", location: "Bangkok", desc: "返回曼谷市區。" },
+                { time: "19:30 - 20:30", title: "Asiatique 摩天輪夜市", type: "nightlife", icon: "shopping", location: "Asiatique The Riverfront", desc: "逛街、摩天輪。推薦：EN Gelato 冰淇淋。" },
+                { time: "21:00 - 22:00", title: "Calypso Cabaret (已訂)", type: "show", icon: "music", location: "Calypso Cabaret Asiatique", desc: "包含飲料。經典人妖秀表演。" },
+                { time: "23:00", title: "Le Du Kaan 高空酒吧 (已訂)", type: "nightlife", icon: "moon", location: "Le Du Kaan Bangkok", desc: "享受曼谷夜景，結束美好的一天。" }
+            ],
+            '11/30': [
+                { time: "08:00 - 09:00", title: "邢泰记 Kopi Hya Tai Ke", type: "food", icon: "coffee", location: "Kopi Hya Tai Ke Sao Chingcha", desc: "โกปี๊เฮี้ยะไถ่กี่ - 傳統泰式早餐，開啟老城區之旅。" },
+                { 
+                    time: "09:20 - 12:00", title: "中國城 / Song Wat Rd 探索", type: "walk", icon: "mapPin", location: "Song Wat Road Bangkok", desc: "文青散策路線",
+                    subList: [ "Yaowarat Gate", "Wanjai Cafe House", "Beans Coffee (可外帶)", "Gu Long Bao (古龍包: 咖啡+包子)", "Tay Cafe (人氣店)", "Play Art House (小藝廊)", "Double Goose 壁畫 (必拍)", "I Scream 冰淇淋", "Saan Song Wat (新開文青店)", "Onest at SongWat (木質美店)", "pink rabbit + Bob (很紅的蛋糕店)", "FV local Thai dessert (泰式甜點)", "Copenn (香氛)", "Song Wat Coffee Roaster (烘豆店)", "Urai Han Palo Braised Goose (米其林滷鵝)", "Weekend Market (河邊市集)", "Pak Khlong Talad 花市 (終點)", "KHIRI Thai tea (花市附近)" ]
+                },
+                { time: "12:30 - 13:00", title: "午餐: Nai Mong Hoi Tod", type: "food", icon: "utensils", location: "Nai Mong Hoi Tod Bangkok", desc: "米其林推薦蚵仔煎，酥脆口感。" },
+                { time: "14:00 - 14:30", title: "Ann Guay Tiew Kua Gai", type: "food", icon: "utensils", location: "Ann Guay Tiew Kua Gai Bangkok", desc: "米其林推薦粿條老店 (雞肉炒河粉)。" },
+                { time: "15:00 - 17:00", title: "Central World 商圈", type: "shopping", icon: "shopping", location: "Central World Bangkok", desc: "逛街行程。重點：Uno cafe, Mith 香水。" },
+                { time: "17:30 - 20:00", title: "Central Park / KAEW BOUTIQUE", type: "relax", icon: "coffee", location: "Kaew Boutique Bangkok", desc: "香蘭葉甜點專賣店，享受傍晚時光。" },
+                { time: "20:30 - 21:30", title: "晚餐: CHONTHONG Kaprow", type: "food", icon: "utensils", location: "Chonthong Kaprow Silom", desc: "ช้อนทอง ต้นตำรับกะเพราไทย (Silom分店) - 正宗泰式打拋豬。" }
+            ]
+        };
 
-        // --- 主程式 ---
-        const BangkokItinerary = () => {
-            const [activeDay, setActiveDay] = useState('11/29');
-            const [checkedItems, setCheckedItems] = useState({});
-            
-            // 模擬點擊音效
-            const playSound = () => {
-                try {
+        const checklistData = [
+            { id: 0, text: "攜帶 5000 台幣", sub: "現金備用" },
+            { id: 1, text: "護照", sub: "Passport" },
+            { id: 2, text: "深色衣服備著", sub: "進寺廟/正式場合" },
+            { id: 3, text: "行動電源", sub: "Power Bank" },
+            { id: 4, text: "充電器", sub: "Charger" },
+            { id: 5, text: "沐浴盥洗用品", sub: "Toiletries" }
+        ];
+
+        // --- SVG Icons ---
+        const icons = {
+            clock: `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+            navigation: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>`,
+            camera: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`,
+            utensils: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>`,
+            coffee: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>`,
+            shopping: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`,
+            music: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`,
+            moon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`,
+            mapPin: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
+            alert: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+            check: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+        };
+
+        // --- 狀態管理 ---
+        let currentDay = '11/29';
+        // 從 LocalStorage 讀取已勾選項目，若無則為空物件
+        let checkedItems = JSON.parse(localStorage.getItem('bangkok_trip_checklist_2025')) || {};
+
+        // --- 音效功能 ---
+        function playSound() {
+            try {
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
                 if (AudioContext) {
                     const audioCtx = new AudioContext();
@@ -113,385 +167,217 @@
                     oscillator.start();
                     oscillator.stop(audioCtx.currentTime + 0.15);
                 }
-                } catch (e) {
+            } catch (e) {
                 console.error("Audio not supported");
-                }
-            };
+            }
+        }
 
-            const handleTabChange = (day) => {
-                playSound();
-                setActiveDay(day);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            };
-            
-            const toggleCheck = (index) => {
-                playSound();
-                setCheckedItems(prev => ({
-                    ...prev,
-                    [index]: !prev[index]
-                }));
-            };
-
-            const itineraryData = {
-                '11/29': [
-                {
-                    time: "09:00 - 09:30",
-                    title: "崖差蒙空寺 Wat Yai Chai Mongkhon",
-                    type: "culture",
-                    icon: <Camera size={20} />,
-                    location: "Wat Yai Chai Mongkhon Ayutthaya",
-                    desc: "大城府最古老的寺廟之一，必看巨大臥佛。"
-                },
-                {
-                    time: "09:45 - 10:30",
-                    title: "瑪哈泰寺 Wat Mahathat",
-                    type: "culture",
-                    icon: <Camera size={20} />,
-                    location: "Wat Mahathat Ayutthaya",
-                    desc: "著名的「樹中佛頭」所在地。"
-                },
-                {
-                    time: "10:40 - 11:45",
-                    title: "巴萊船面 Palek Boat Noodles",
-                    type: "food",
-                    icon: <Utensils size={20} />,
-                    location: "Pa Lek Boat Noodle Ayutthaya",
-                    desc: "ก๋วยเตี๋ยวเรือป้าเล็กเจ้าเก่า - 當地老字號船麵。"
-                },
-                {
-                    time: "12:30 - 13:00",
-                    title: "SYAMA Cafe",
-                    type: "cafe",
-                    icon: <Coffee size={20} />,
-                    location: "SYAMA AYUDHYA",
-                    desc: "河畔景觀咖啡廳，適合休息拍照。"
-                },
-                {
-                    time: "13:30 - 14:30",
-                    title: "Kung Phuean Praew",
-                    type: "food",
-                    icon: <Utensils size={20} />,
-                    location: "Kung Phuean Praew Ayutthaya",
-                    desc: "享受大城著名的烤蝦料理。"
-                },
-                {
-                    time: "15:00 - 17:00",
-                    title: "柴瓦塔那蘭寺 Wat Chaiwatthanaram",
-                    type: "culture",
-                    icon: <Camera size={20} />,
-                    location: "Wat Chaiwatthanaram Ayutthaya",
-                    desc: "🔥 Dress Code: 泰服體驗。夕陽最美，酷似吳哥窟。"
-                },
-                {
-                    time: "17:00",
-                    title: "Back to Bangkok",
-                    type: "travel",
-                    icon: <Navigation size={20} />,
-                    location: "Bangkok",
-                    desc: "返回曼谷市區。"
-                },
-                {
-                    time: "19:30 - 20:30",
-                    title: "Asiatique 摩天輪夜市",
-                    type: "nightlife",
-                    icon: <ShoppingBag size={20} />,
-                    location: "Asiatique The Riverfront",
-                    desc: "逛街、摩天輪。推薦：EN Gelato 冰淇淋。"
-                },
-                {
-                    time: "21:00 - 22:00",
-                    title: "Calypso Cabaret (已訂)",
-                    type: "show",
-                    icon: <Music size={20} />,
-                    location: "Calypso Cabaret Asiatique",
-                    desc: "包含飲料。經典人妖秀表演。"
-                },
-                {
-                    time: "23:00",
-                    title: "Le Du Kaan 高空酒吧 (已訂)",
-                    type: "nightlife",
-                    icon: <Moon size={20} />,
-                    location: "Le Du Kaan Bangkok",
-                    desc: "享受曼谷夜景，結束美好的一天。"
-                }
-                ],
-                '11/30': [
-                {
-                    time: "08:00 - 09:00",
-                    title: "邢泰记 Kopi Hya Tai Ke",
-                    type: "food",
-                    icon: <Coffee size={20} />,
-                    location: "Kopi Hya Tai Ke Sao Chingcha",
-                    desc: "โกปี๊เฮี้ยะไถ่กี่ - 傳統泰式早餐，開啟老城區之旅。"
-                },
-                {
-                    time: "09:20 - 12:00",
-                    title: "中國城 / Song Wat Rd 探索",
-                    type: "walk",
-                    icon: <MapPin size={20} />,
-                    location: "Song Wat Road Bangkok",
-                    desc: "文青散策路線",
-                    subList: [
-                    "Yaowarat Gate",
-                    "Wanjai Cafe House",
-                    "Beans Coffee (可外帶)",
-                    "Gu Long Bao (古龍包: 咖啡+包子)",
-                    "Tay Cafe (人氣店)",
-                    "Play Art House (小藝廊)",
-                    "Double Goose 壁畫 (必拍)",
-                    "I Scream 冰淇淋",
-                    "Saan Song Wat (新開文青店)",
-                    "Onest at SongWat (木質美店)",
-                    "pink rabbit + Bob (很紅的蛋糕店)",
-                    "FV local Thai dessert (泰式甜點)",
-                    "Copenn (香氛)",
-                    "Song Wat Coffee Roaster (烘豆店)",
-                    "Urai Han Palo Braised Goose (米其林滷鵝)",
-                    "Weekend Market (河邊市集)",
-                    "Pak Khlong Talad 花市 (終點)",
-                    "KHIRI Thai tea (花市附近)"
-                    ]
-                },
-                {
-                    time: "12:30 - 13:00",
-                    title: "午餐: Nai Mong Hoi Tod",
-                    type: "food",
-                    icon: <Utensils size={20} />,
-                    location: "Nai Mong Hoi Tod Bangkok",
-                    desc: "米其林推薦蚵仔煎，酥脆口感。"
-                },
-                {
-                    time: "14:00 - 14:30",
-                    title: "Ann Guay Tiew Kua Gai",
-                    type: "food",
-                    icon: <Utensils size={20} />,
-                    location: "Ann Guay Tiew Kua Gai Bangkok",
-                    desc: "米其林推薦粿條老店 (雞肉炒河粉)。"
-                },
-                {
-                    time: "15:00 - 17:00",
-                    title: "Central World 商圈",
-                    type: "shopping",
-                    icon: <ShoppingBag size={20} />,
-                    location: "Central World Bangkok",
-                    desc: "逛街行程。重點：Uno cafe, Mith 香水。"
-                },
-                {
-                    time: "17:30 - 20:00",
-                    title: "Central Park / KAEW BOUTIQUE",
-                    type: "relax",
-                    icon: <Coffee size={20} />,
-                    location: "Kaew Boutique Bangkok",
-                    desc: "香蘭葉甜點專賣店，享受傍晚時光。"
-                },
-                {
-                    time: "20:30 - 21:30",
-                    title: "晚餐: CHONTHONG Kaprow",
-                    type: "food",
-                    icon: <Utensils size={20} />,
-                    location: "Chonthong Kaprow Silom",
-                    desc: "ช้อนทอง ต้นตำรับกะเพราไทย (Silom分店) - 正宗泰式打拋豬。"
-                }
-                ]
-            };
-            
-            const checklistData = [
-                { text: "攜帶 5000 台幣", sub: "現金備用" },
-                { text: "護照", sub: "Passport" },
-                { text: "深色衣服備著", sub: "進寺廟/正式場合" },
-                { text: "行動電源", sub: "Power Bank" },
-                { text: "充電器", sub: "Charger" },
-                { text: "沐浴盥洗用品", sub: "Toiletries" }
-            ];
-
-            const getTypeColor = (type) => {
-                switch (type) {
+        // --- 樣式輔助函式 ---
+        function getTypeColor(type) {
+            switch (type) {
                 case 'food': return 'bg-orange-100 text-orange-700 border-orange-200';
                 case 'culture': return 'bg-amber-100 text-amber-700 border-amber-200';
                 case 'cafe': return 'bg-yellow-50 text-yellow-800 border-yellow-200';
                 case 'nightlife': return 'bg-purple-100 text-purple-800 border-purple-200';
                 case 'shopping': return 'bg-pink-50 text-pink-700 border-pink-200';
                 default: return 'bg-teal-50 text-teal-800 border-teal-200';
+            }
+        }
+
+        // --- 渲染函式 ---
+        function renderItinerary() {
+            const container = document.getElementById('itinerary-container');
+            container.innerHTML = ''; // 清空內容
+
+            const items = itineraryData[currentDay];
+            
+            // 渲染行程卡片
+            items.forEach((item, index) => {
+                const card = document.createElement('div');
+                // 加上 fade-in 動畫與樣式
+                card.className = `group relative bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-md border-l-4 border-l-amber-500 border-y border-r border-amber-100 hover:shadow-2xl hover:border-l-purple-600 transition-all duration-300 transform hover:-translate-y-1 fade-in`;
+                card.style.animationDelay = `${index * 0.05}s`; // 瀑布流動畫效果
+
+                // 地點列表的 HTML
+                let subListHTML = '';
+                if (item.subList) {
+                    const listItems = item.subList.map(sub => 
+                        `<li class="flex items-start gap-3 text-sm text-gray-700 font-sans"><span class="text-purple-600 mt-1">✦</span>${sub}</li>`
+                    ).join('');
+                    subListHTML = `
+                        <div class="bg-amber-50/50 rounded-lg p-4 mb-4 border border-amber-200 max-h-64 overflow-y-auto custom-scrollbar">
+                            <p class="text-xs font-bold text-amber-800 mb-3 uppercase tracking-widest border-b border-amber-200 pb-1">Hidden Gems</p>
+                            <ul class="space-y-3">${listItems}</ul>
+                        </div>
+                    `;
                 }
-            };
 
-            // 產生 Google Maps 連結
-            const getMapLink = (location) => {
-                return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
-            };
-
-            return (
-                <div className="min-h-screen bg-gradient-to-b from-amber-50 via-orange-50 to-amber-100 pb-20 font-serif selection:bg-amber-200">
-                
-                {/* Header Image Section */}
-                <div className="relative w-full h-72 md:h-96 overflow-hidden shadow-2xl bg-gray-900 border-b-4 border-amber-400">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                    <img 
-                        src="image.png" 
-                        alt="Bangkok Trip DM" 
-                        className="w-full h-full object-contain opacity-95 hover:scale-105 transition-transform duration-700"
-                        onError={(e) => {
-                            e.target.onerror = null; 
-                            e.target.src = "https://images.unsplash.com/photo-1563492065599-3520f775eeed?q=80&w=1000&auto=format&fit=crop";
-                        }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                    </div>
-                    
-                    <div className="absolute bottom-8 left-0 right-0 text-center px-4">
-                    <h1 className="text-3xl md:text-5xl font-serif font-bold leading-tight drop-shadow-lg text-amber-100 tracking-wider">
-                        <span className="block text-sm md:text-base text-amber-300 uppercase tracking-[0.3em] mb-2 font-sans">Amazing Thailand</span>
-                        Bangkok Trip
-                        <span className="block text-xl md:text-3xl mt-2 text-amber-400">November 2025</span>
-                    </h1>
-                    </div>
-                </div>
-
-                {/* Navigation Tabs */}
-                <div className="sticky top-0 z-50 bg-amber-50/95 backdrop-blur-md shadow-md border-b border-amber-200">
-                    <div className="flex justify-center p-3 gap-6 max-w-md mx-auto">
-                    {['11/29', '11/30'].map((day) => (
-                        <button
-                        key={day}
-                        onClick={() => handleTabChange(day)}
-                        className={`flex-1 py-2 px-4 rounded-full font-serif font-bold text-lg transition-all duration-300 border-2 ${
-                            activeDay === day 
-                            ? 'bg-purple-900 border-amber-400 text-amber-100 shadow-lg shadow-purple-900/40 transform scale-105' 
-                            : 'bg-white border-amber-100 text-amber-800 hover:bg-amber-100 hover:border-amber-300'
-                        }`}
-                        >
-                        {day}
-                        </button>
-                    ))}
-                    </div>
-                </div>
-
-                {/* Itinerary List */}
-                <div className="max-w-2xl mx-auto px-4 mt-8 space-y-8">
-                    {itineraryData[activeDay].map((item, index) => (
-                    <div 
-                        key={index}
-                        className="group relative bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-md border-l-4 border-l-amber-500 border-y border-r border-amber-100 hover:shadow-2xl hover:border-l-purple-600 transition-all duration-300 transform hover:-translate-y-1"
-                    >
-                        {/* Time Badge */}
-                        <div className="absolute -top-3 left-6">
-                        <span className="bg-purple-900 text-amber-100 text-xs font-sans font-bold px-4 py-1.5 rounded-full shadow-md flex items-center gap-1 border border-amber-500">
-                            <Clock size={12} className="text-amber-400" />
-                            {item.time}
+                card.innerHTML = `
+                    <div class="absolute -top-3 left-6">
+                        <span class="bg-purple-900 text-amber-100 text-xs font-sans font-bold px-4 py-1.5 rounded-full shadow-md flex items-center gap-1 border border-amber-500">
+                            ${icons.clock} ${item.time}
                         </span>
+                    </div>
+                    <div class="flex gap-4 pt-3">
+                        <div class="flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center shadow-inner ${getTypeColor(item.type)}">
+                            ${icons[item.icon] || icons.mapPin}
                         </div>
-
-                        <div className="flex gap-4 pt-3">
-                        {/* Type Icon */}
-                        <div className={`flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center shadow-inner ${getTypeColor(item.type)}`}>
-                            {item.icon}
+                        <div class="flex-1">
+                            <h3 class="font-serif font-bold text-xl text-gray-800 leading-tight mb-2 tracking-wide text-purple-950">${item.title}</h3>
+                            ${item.desc ? `<p class="text-sm font-sans text-gray-600 mb-4 leading-relaxed">${item.desc}</p>` : ''}
+                            ${subListHTML}
                         </div>
-
-                        {/* Content */}
-                        <div className="flex-1">
-                            <h3 className="font-serif font-bold text-xl text-gray-800 leading-tight mb-2 tracking-wide text-purple-950">{item.title}</h3>
-                            
-                            {/* Description */}
-                            {item.desc && (
-                            <p className="text-sm font-sans text-gray-600 mb-4 leading-relaxed">{item.desc}</p>
-                            )}
-
-                            {/* Special Sub-list */}
-                            {item.subList && (
-                            <div className="bg-amber-50/50 rounded-lg p-4 mb-4 border border-amber-200 max-h-64 overflow-y-auto custom-scrollbar">
-                                <p className="text-xs font-bold text-amber-800 mb-3 uppercase tracking-widest border-b border-amber-200 pb-1">Hidden Gems</p>
-                                <ul className="space-y-3">
-                                {item.subList.map((sub, i) => (
-                                    <li key={i} className="flex items-start gap-3 text-sm text-gray-700 font-sans">
-                                    <span className="text-purple-600 mt-1">✦</span>
-                                    {sub}
-                                    </li>
-                                ))}
-                                </ul>
-                            </div>
-                            )}
-                        </div>
-                        </div>
-
-                        {/* Action Buttons */}
-                        <div className="mt-2 pt-4 border-t border-dashed border-amber-200 flex justify-end">
-                        <a
-                            href={getMapLink(item.location)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={playSound}
-                            className="flex items-center gap-2 bg-amber-100 hover:bg-amber-200 text-amber-900 px-5 py-2.5 rounded-lg text-sm font-bold transition-colors active:scale-95 no-underline shadow-sm border border-amber-200"
-                        >
-                            <Navigation size={16} className="text-purple-700" />
-                            <span className="font-sans">導航</span>
+                    </div>
+                    <div class="mt-2 pt-4 border-t border-dashed border-amber-200 flex justify-end">
+                        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.location)}" target="_blank" rel="noopener noreferrer" onclick="playSound()" class="flex items-center gap-2 bg-amber-100 hover:bg-amber-200 text-amber-900 px-5 py-2.5 rounded-lg text-sm font-bold transition-colors active:scale-95 no-underline shadow-sm border border-amber-200">
+                            <span class="text-purple-700">${icons.navigation}</span>
+                            <span class="font-sans">導航</span>
                         </a>
-                        </div>
                     </div>
-                    ))}
+                `;
+                container.appendChild(card);
+            });
 
-                    {/* Important Reminders Section - Only visible on 11/30 */}
-                    {activeDay === '11/30' && (
-                        <div className="mt-8 bg-amber-100/80 rounded-xl p-6 border-2 border-amber-400 border-dashed relative overflow-hidden shadow-lg animate-fade-in-up">
-                            {/* Decorative header */}
-                            <div className="flex items-center gap-3 mb-6 pb-4 border-b border-amber-300/50">
-                                <div className="bg-purple-900 text-white p-2.5 rounded-full shadow-md">
-                                    <AlertCircle size={24} />
-                                </div>
-                                <div>
-                                    <h3 className="font-serif font-bold text-2xl text-purple-900">重點提醒</h3>
-                                    <p className="text-xs font-sans text-amber-700 uppercase tracking-widest">Important Checklist</p>
-                                </div>
-                            </div>
-                            
-                            <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {checklistData.map((item, idx) => {
-                                    const isChecked = checkedItems[idx];
-                                    return (
-                                        <li 
-                                            key={idx} 
-                                            onClick={() => toggleCheck(idx)}
-                                            className={`flex items-center gap-3 p-3 rounded-lg border shadow-sm cursor-pointer transition-all duration-300 select-none ${
-                                                isChecked 
-                                                ? 'bg-green-50 border-green-200 shadow-inner' 
-                                                : 'bg-white/60 border-amber-200/50 hover:bg-white hover:shadow-md'
-                                            }`}
-                                        >
-                                            <div className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                                                isChecked ? 'bg-green-500 border-green-500 scale-110' : 'bg-transparent border-gray-400'
-                                            }`}>
-                                                {isChecked && <Check size={14} className="text-white" strokeWidth={3} />}
-                                            </div>
-                                            <div>
-                                                <span className={`block font-bold font-serif text-lg transition-all duration-300 ${
-                                                    isChecked ? 'text-green-800 line-through decoration-green-500/50 opacity-70' : 'text-amber-900'
-                                                }`}>{item.text}</span>
-                                                <span className={`block text-xs font-sans transition-colors ${
-                                                    isChecked ? 'text-green-600/70' : 'text-amber-600/80'
-                                                }`}>{item.sub}</span>
-                                            </div>
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                        </div>
-                    )}
-                    
-                    {/* End of list marker */}
-                    <div className="text-center py-10 opacity-60">
-                    <div className="flex items-center justify-center gap-2 mb-2">
-                        <span className="h-px w-12 bg-amber-300"></span>
-                        <span className="text-amber-500 text-xl">✤</span>
-                        <span className="h-px w-12 bg-amber-300"></span>
-                    </div>
-                    <p className="text-xs font-serif text-amber-800 tracking-widest">End of {activeDay}</p>
+            // 如果是 11/30，渲染 Checklist
+            if (currentDay === '11/30') {
+                renderChecklist(container);
+            }
+
+            // 渲染結束標記
+            const endMarker = document.createElement('div');
+            endMarker.className = "text-center py-10 opacity-60 fade-in";
+            endMarker.style.animationDelay = "0.5s";
+            endMarker.innerHTML = `
+                <div class="flex items-center justify-center gap-2 mb-2">
+                    <span class="h-px w-12 bg-amber-300"></span>
+                    <span class="text-amber-500 text-xl">✤</span>
+                    <span class="h-px w-12 bg-amber-300"></span>
+                </div>
+                <p class="text-xs font-serif text-amber-800 tracking-widest">End of ${currentDay}</p>
+            `;
+            container.appendChild(endMarker);
+        }
+
+        function renderChecklist(container) {
+            const checklistContainer = document.createElement('div');
+            checklistContainer.className = "mt-8 bg-amber-100/80 rounded-xl p-6 border-2 border-amber-400 border-dashed relative overflow-hidden shadow-lg fade-in";
+            
+            // Header
+            const header = `
+                <div class="flex items-center gap-3 mb-6 pb-4 border-b border-amber-300/50">
+                    <div class="bg-purple-900 text-white p-2.5 rounded-full shadow-md">${icons.alert}</div>
+                    <div>
+                        <h3 class="font-serif font-bold text-2xl text-purple-900">重點提醒</h3>
+                        <p class="text-xs font-sans text-amber-700 uppercase tracking-widest">Important Checklist</p>
                     </div>
                 </div>
-                </div>
-            );
+            `;
+
+            // List
+            const list = document.createElement('ul');
+            list.className = "grid grid-cols-1 md:grid-cols-2 gap-4";
+
+            checklistData.forEach(item => {
+                const isChecked = checkedItems[item.id];
+                const li = document.createElement('li');
+                li.className = `flex items-center gap-3 p-3 rounded-lg border shadow-sm cursor-pointer transition-all duration-300 select-none scale-click ${
+                    isChecked ? 'bg-green-50 border-green-200 shadow-inner' : 'bg-white/60 border-amber-200/50 hover:bg-white hover:shadow-md'
+                }`;
+                
+                li.innerHTML = `
+                    <div class="flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                        isChecked ? 'bg-green-500 border-green-500 scale-110' : 'bg-transparent border-gray-400'
+                    }">
+                        ${isChecked ? `<span class="text-white">${icons.check}</span>` : ''}
+                    </div>
+                    <div>
+                        <span class="block font-bold font-serif text-lg transition-all duration-300 ${
+                            isChecked ? 'text-green-800 line-through decoration-green-500/50 opacity-70' : 'text-amber-900'
+                        }">${item.text}</span>
+                        <span class="block text-xs font-sans transition-colors ${
+                            isChecked ? 'text-green-600/70' : 'text-amber-600/80'
+                        }">${item.sub}</span>
+                    </div>
+                `;
+
+                // 點擊事件
+                li.onclick = () => {
+                    playSound();
+                    // Toggle state
+                    if (checkedItems[item.id]) {
+                        delete checkedItems[item.id];
+                    } else {
+                        checkedItems[item.id] = true;
+                    }
+                    // Save to local storage
+                    localStorage.setItem('bangkok_trip_checklist_2025', JSON.stringify(checkedItems));
+                    // Re-render checklist (為了簡單，我們重新渲染整個頁面清單部分，或者只更新 class)
+                    // 這裡為了保持動畫流暢，我們直接重新渲染整個清單區塊比較簡單，但為了使用者體驗，最好只變更樣式
+                    // 重新渲染整個行程是比較簡單的做法，但會閃爍，所以我們手動更新這個元素的 class
+                    updateListItemStyle(li, item.id);
+                };
+                list.appendChild(li);
+            });
+
+            checklistContainer.innerHTML = header;
+            checklistContainer.appendChild(list);
+            container.appendChild(checklistContainer);
+        }
+
+        // 輔助更新清單樣式 (避免重繪整個區塊)
+        function updateListItemStyle(element, id) {
+            const isChecked = checkedItems[id];
+            element.className = `flex items-center gap-3 p-3 rounded-lg border shadow-sm cursor-pointer transition-all duration-300 select-none scale-click ${
+                isChecked ? 'bg-green-50 border-green-200 shadow-inner' : 'bg-white/60 border-amber-200/50 hover:bg-white hover:shadow-md'
+            }`;
+            
+            const checkbox = element.querySelector('div:first-child');
+            checkbox.className = `flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                isChecked ? 'bg-green-500 border-green-500 scale-110' : 'bg-transparent border-gray-400'
+            }`;
+            checkbox.innerHTML = isChecked ? `<span class="text-white">${icons.check}</span>` : '';
+
+            const title = element.querySelector('span:nth-of-type(1)');
+            title.className = `block font-bold font-serif text-lg transition-all duration-300 ${
+                isChecked ? 'text-green-800 line-through decoration-green-500/50 opacity-70' : 'text-amber-900'
+            }`;
+
+            const sub = element.querySelector('span:nth-of-type(2)');
+            sub.className = `block text-xs font-sans transition-colors ${
+                isChecked ? 'text-green-600/70' : 'text-amber-600/80'
+            }`;
+        }
+
+        // --- Tab 切換 ---
+        function switchTab(day) {
+            playSound();
+            currentDay = day;
+            
+            // 更新 Tab 樣式
+            const btn1129 = document.getElementById('tab-1129');
+            const btn1130 = document.getElementById('tab-1130');
+            
+            const activeClass = "bg-purple-900 border-amber-400 text-amber-100 shadow-lg shadow-purple-900/40 transform scale-105";
+            const inactiveClass = "bg-white border-amber-100 text-amber-800 hover:bg-amber-100 hover:border-amber-300";
+
+            if (day === '11/29') {
+                btn1129.className = `flex-1 py-2 px-4 rounded-full font-serif font-bold text-lg transition-all duration-300 border-2 ${activeClass}`;
+                btn1130.className = `flex-1 py-2 px-4 rounded-full font-serif font-bold text-lg transition-all duration-300 border-2 ${inactiveClass}`;
+            } else {
+                btn1129.className = `flex-1 py-2 px-4 rounded-full font-serif font-bold text-lg transition-all duration-300 border-2 ${inactiveClass}`;
+                btn1130.className = `flex-1 py-2 px-4 rounded-full font-serif font-bold text-lg transition-all duration-300 border-2 ${activeClass}`;
+            }
+
+            // 滾動到頂部並重新渲染
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            renderItinerary();
+        }
+
+        // --- 初始化 ---
+        window.onload = function() {
+            renderItinerary();
         };
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<BangkokItinerary />);
     </script>
 </body>
 </html>
