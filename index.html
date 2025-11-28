@@ -9,7 +9,7 @@
     <!-- 引入 Tailwind CSS (樣式庫) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- 引入 FontAwesome (為了氣象功能) -->
+    <!-- 引入 FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- 引入 Google Fonts -->
@@ -20,7 +20,7 @@
         body {
             font-family: 'Noto Sans TC', sans-serif;
             -webkit-tap-highlight-color: transparent;
-            transition: background 0.5s ease; /* 背景切換動畫 */
+            transition: background 0.5s ease;
         }
         h1, h2, h3, .font-serif {
             font-family: 'Playfair Display', 'Noto Serif TC', serif;
@@ -51,8 +51,8 @@
             border: 3px solid rgba(255,255,255,0.1);
             border-top: 3px solid #38bdf8;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             animation: spin 0.8s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -73,14 +73,13 @@
         .tag:hover { background: rgba(255,255,255,0.2); transform: scale(1.05); }
         .tag i { margin-right: 6px; }
         
-        /* 隱藏氣象部分的水平捲軸 */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body id="main-body" class="bg-amber-50 min-h-screen pb-24 selection:bg-amber-200">
 
-    <!-- Header Image Section (Only visible on non-weather tabs) -->
+    <!-- Header Image Section -->
     <div id="main-header" class="relative w-full h-72 md:h-96 overflow-hidden shadow-2xl bg-gray-900 border-b-4 border-amber-400 group transition-all duration-500">
         <a href="https://www.google.com/maps/search/?api=1&query=Bangkok" target="_blank" class="block w-full h-full relative cursor-pointer" onclick="playSound()" title="點擊開啟曼谷地圖">
             <div class="absolute inset-0 flex items-center justify-center">
@@ -111,29 +110,23 @@
     <!-- Navigation Tabs -->
     <div class="sticky top-0 z-50 bg-amber-50/95 backdrop-blur-md shadow-md border-b border-amber-200 transition-colors duration-500" id="nav-container">
         <div class="flex justify-center p-3 gap-2 md:gap-3 max-w-lg mx-auto overflow-x-auto">
-            <button id="tab-1129" onclick="switchTab('11/29')" class="flex-1 py-2 px-3 rounded-xl font-serif font-bold text-sm md:text-lg transition-all duration-300 border-2 whitespace-nowrap bg-purple-900 border-amber-400 text-amber-100 shadow-lg shadow-purple-900/40 transform scale-105">
-                11/29
-            </button>
-            <button id="tab-1130" onclick="switchTab('11/30')" class="flex-1 py-2 px-3 rounded-xl font-serif font-bold text-sm md:text-lg transition-all duration-300 border-2 whitespace-nowrap bg-white border-amber-100 text-amber-800 hover:bg-amber-100 hover:border-amber-300">
-                11/30
-            </button>
+            <button id="tab-1129" onclick="switchTab('11/29')" class="flex-1 py-2 px-3 rounded-xl font-serif font-bold text-sm md:text-lg transition-all duration-300 border-2 whitespace-nowrap bg-purple-900 border-amber-400 text-amber-100 shadow-lg shadow-purple-900/40 transform scale-105">11/29</button>
+            <button id="tab-1130" onclick="switchTab('11/30')" class="flex-1 py-2 px-3 rounded-xl font-serif font-bold text-sm md:text-lg transition-all duration-300 border-2 whitespace-nowrap bg-white border-amber-100 text-amber-800 hover:bg-amber-100 hover:border-amber-300">11/30</button>
             <button id="tab-split" onclick="switchTab('split')" class="flex-1 py-2 px-3 rounded-xl font-serif font-bold text-sm md:text-lg transition-all duration-300 border-2 whitespace-nowrap bg-white border-amber-100 text-amber-800 hover:bg-amber-100 hover:border-amber-300 flex items-center justify-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="16" y1="18" x2="16" y2="18"/><line x1="12" y1="18" x2="12" y2="18"/><line x1="8" y1="18" x2="8" y2="18"/></svg>
-                分帳
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="16" y1="18" x2="16" y2="18"/><line x1="12" y1="18" x2="12" y2="18"/><line x1="8" y1="18" x2="8" y2="18"/></svg> 分帳
             </button>
             <button id="tab-weather" onclick="switchTab('weather')" class="flex-1 py-2 px-3 rounded-xl font-serif font-bold text-sm md:text-lg transition-all duration-300 border-2 whitespace-nowrap bg-white border-amber-100 text-amber-800 hover:bg-amber-100 hover:border-amber-300 flex items-center justify-center gap-1">
-                <i class="fa-solid fa-cloud-sun"></i>
-                氣象
+                <i class="fa-solid fa-cloud-sun"></i> 氣象
             </button>
         </div>
     </div>
 
-    <!-- Container for Itinerary -->
+    <!-- Itinerary View -->
     <div id="itinerary-view" class="max-w-2xl mx-auto px-4 mt-8 space-y-8"></div>
 
-    <!-- Container for Split Bill -->
+    <!-- Split Bill View -->
     <div id="split-view" class="hidden max-w-2xl mx-auto px-4 mt-8 space-y-6 pb-24">
-        <!-- 分帳 UI 內容 (與之前相同) -->
+        <!-- 分帳 UI -->
         <div class="bg-white rounded-2xl shadow-md p-5 border border-amber-100">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-xl font-serif font-bold text-purple-900">分帳設定</h3>
@@ -188,11 +181,10 @@
         </div>
     </div>
 
-    <!-- Container for Weather (Hidden by default) -->
+    <!-- Weather View (v9: Better Input) -->
     <div id="weather-view" class="hidden w-full min-h-[calc(100vh-150px)] p-4 flex items-start justify-center pt-8">
-        <!-- 嵌入的天氣模組 -->
         <div class="glass-panel w-full max-w-md rounded-[2rem] p-6 text-white relative overflow-hidden shadow-2xl">
-            <!-- Header & Date -->
+            <!-- Header -->
             <div class="text-center mb-6 z-10 relative">
                 <h1 class="text-xl font-bold flex items-center justify-center gap-2">
                     <span id="locationName">在地氣象顧問</span>
@@ -200,18 +192,36 @@
                 <div id="dateDisplay" class="text-indigo-200 text-sm mt-1 font-medium tracking-wide"></div>
             </div>
 
-            <!-- Button -->
-            <div class="flex flex-col items-center gap-3 mb-6 relative z-10">
-                <button id="getLocationBtn" onclick="startWeatherProcess()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2 border border-white/10">
-                    <span id="btnText">分析今日天氣 & 穿搭</span>
-                    <span id="btnLoader" class="loader hidden-el"></span>
+            <!-- Controls: Manual Input + Search Btn -->
+            <div class="flex flex-col gap-3 mb-6 relative z-10">
+                <!-- Input: 加深背景，白色文字 -->
+                <input type="text" id="manualCityInput" placeholder="請輸入城市名稱 (例如: Bangkok)" 
+                    class="w-full bg-slate-900/60 border border-white/30 rounded-xl px-4 py-4 text-white placeholder-slate-400 focus:outline-none focus:border-blue-400 focus:bg-slate-900/80 transition-all backdrop-blur-md shadow-inner text-base tracking-wide"
+                    onkeypress="if(event.key === 'Enter') manualSearch()"
+                    style="text-shadow: 0 1px 2px rgba(0,0,0,0.5);" 
+                >
+                
+                <!-- Search Button: Moved Down & Full Width -->
+                <button onclick="manualSearch()" 
+                    class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2 border border-white/10">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <span>搜尋天氣</span>
                 </button>
+                
+                <!-- GPS Fallback -->
+                <button onclick="startWeatherProcess()" 
+                    class="mt-1 text-xs text-blue-300 hover:text-white flex items-center justify-center gap-2 py-2 hover:bg-white/10 rounded-lg transition-colors border border-dashed border-blue-300/30">
+                    <i class="fa-solid fa-location-crosshairs"></i>
+                    定位目前位置 (GPS)
+                </button>
+
                 <p id="statusMsg" class="text-xs text-blue-200 min-h-[1.5rem] text-center"></p>
+                <div id="btnLoader" class="loader hidden-el mx-auto"></div>
             </div>
 
-            <!-- Result Container -->
+            <!-- Weather Result -->
             <div id="weatherResult" class="hidden-el flex flex-col gap-5 relative z-10">
-                <!-- 1. Main Weather Card -->
+                <!-- 1. Main Card -->
                 <div class="flex items-center justify-between bg-white/5 rounded-2xl p-5 border border-white/10 relative overflow-hidden group">
                     <div class="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div class="relative z-10">
@@ -226,7 +236,7 @@
                     </div>
                 </div>
 
-                <!-- 2. Smart Outfit Advice -->
+                <!-- 2. Outfit Advice -->
                 <div class="bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-2xl p-5 border border-white/10">
                     <h3 class="text-xs font-bold text-indigo-200 uppercase tracking-wider mb-3 flex items-center">
                         <i class="fa-solid fa-shirt mr-2"></i> 出門穿搭建議
@@ -235,7 +245,7 @@
                     <div id="outfitSummary" class="text-sm text-slate-200 mt-3 leading-relaxed font-light border-t border-white/10 pt-3"></div>
                 </div>
 
-                <!-- 3. Stats Grid -->
+                <!-- 3. Stats -->
                 <div class="grid grid-cols-3 gap-2">
                     <div class="bg-white/5 rounded-xl p-2 py-3 flex flex-col items-center justify-center border border-white/5">
                         <i class="fa-solid fa-umbrella text-blue-400 mb-1 text-sm"></i>
@@ -254,7 +264,7 @@
                     </div>
                 </div>
 
-                <!-- 4. Forecast Strip -->
+                <!-- 4. Forecast -->
                 <div>
                     <div class="overflow-x-auto pb-2 scrollbar-hide">
                         <div class="flex gap-2" id="forecastContainer"></div>
@@ -269,7 +279,7 @@
     </div>
 
     <script>
-        // --- 通用核心邏輯 ---
+        // --- 核心邏輯 ---
         const icons = {
             clock: `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
             navigation: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>`,
@@ -285,6 +295,9 @@
             trash: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,
             arrowRight: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`
         };
+
+        let currentDay = '11/29';
+        let checkedItems = JSON.parse(localStorage.getItem('bangkok_trip_checklist_2025')) || {};
 
         function playSound() {
             try {
@@ -334,8 +347,6 @@
             ]
         };
 
-        let currentDay = '11/29';
-
         function renderItinerary() {
             const container = document.getElementById('itinerary-view');
             container.innerHTML = '';
@@ -347,14 +358,12 @@
                 card.className = `group relative bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-md border-l-4 border-l-amber-500 border-y border-r border-amber-100 hover:shadow-2xl hover:border-l-purple-600 transition-all duration-300 transform hover:-translate-y-1 fade-in`;
                 card.style.animationDelay = `${index * 0.05}s`;
                 
-                // 子清單 HTML
                 let subListHTML = '';
                 if (item.subList) {
                     const listItems = item.subList.map(sub => `<li class="flex items-start gap-3 text-sm text-gray-700 font-sans"><span class="text-purple-600 mt-1">✦</span>${sub}</li>`).join('');
                     subListHTML = `<div class="bg-amber-50/50 rounded-lg p-4 mb-4 border border-amber-200 max-h-64 overflow-y-auto custom-scrollbar"><p class="text-xs font-bold text-amber-800 mb-3 uppercase tracking-widest border-b border-amber-200 pb-1">Hidden Gems</p><ul class="space-y-3">${listItems}</ul></div>`;
                 }
                 
-                // Type Color
                 let typeColor = 'bg-teal-50 text-teal-800 border-teal-200';
                 switch (item.type) {
                     case 'food': typeColor = 'bg-orange-100 text-orange-700 border-orange-200'; break;
@@ -384,17 +393,6 @@
             container.appendChild(endMarker);
         }
 
-        // --- 2. Checklist 邏輯 ---
-        const checklistData = [
-            { id: 0, text: "攜帶 5000 台幣", sub: "現金備用" },
-            { id: 1, text: "護照", sub: "Passport" },
-            { id: 2, text: "深色衣服備著", sub: "進寺廟/正式場合" },
-            { id: 3, text: "行動電源", sub: "Power Bank" },
-            { id: 4, text: "充電器", sub: "Charger" },
-            { id: 5, text: "沐浴盥洗用品", sub: "Toiletries" }
-        ];
-        let checkedItems = JSON.parse(localStorage.getItem('bangkok_trip_checklist_2025')) || {};
-
         function renderChecklist(container) {
             const checklistContainer = document.createElement('div');
             checklistContainer.className = "mt-8 bg-amber-100/80 rounded-xl p-6 border-2 border-amber-400 border-dashed relative overflow-hidden shadow-lg fade-in";
@@ -412,7 +410,7 @@
                     playSound();
                     if (checkedItems[item.id]) delete checkedItems[item.id]; else checkedItems[item.id] = true;
                     localStorage.setItem('bangkok_trip_checklist_2025', JSON.stringify(checkedItems));
-                    renderItinerary(); // Re-render to update
+                    renderItinerary();
                 };
                 list.appendChild(li);
             });
@@ -427,12 +425,10 @@
         let selectedPayers = [];
 
         function saveSplitData() { localStorage.setItem('bangkok_trip_split_data_v4', JSON.stringify(splitData)); renderSplitView(); }
-        
         function renderSplitView() {
             document.getElementById('currency-select').value = splitData.currency;
             document.getElementById('user-list').innerHTML = splitData.users.map(u => `<div class="flex items-center gap-1 bg-purple-100 text-purple-800 text-sm font-medium px-3 py-1 rounded-full border border-purple-200">${u}<button onclick="removeUser('${u}')" class="ml-1 text-purple-400 hover:text-purple-600">×</button></div>`).join('') || '<span class="text-gray-400 text-sm italic">尚未新增成員</span>';
             renderPayerSelection();
-            
             const symbol = currencySymbols[splitData.currency];
             let total = 0;
             document.getElementById('expense-list-body').innerHTML = splitData.expenses.length === 0 ? `<tr class="bg-white border-b"><td colspan="4" class="px-3 py-4 text-center text-gray-400">目前沒有支出紀錄</td></tr>` : splitData.expenses.map((exp, idx) => {
@@ -442,7 +438,6 @@
             document.getElementById('total-amount-display').innerText = `總計: ${symbol} ${total}`;
             calculateSettlement();
         }
-
         function renderPayerSelection() {
             const container = document.getElementById('payer-selection-container');
             if (splitData.users.length === 0) { container.innerHTML = '<span class="text-gray-400 text-sm py-1">請先新增成員</span>'; return; }
@@ -474,10 +469,8 @@
             container.innerHTML = results.length === 0 ? '<div class="text-center text-green-600 font-bold py-4">帳目已平衡，無需轉帳！</div>' : results.map(r => `<div class="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm border-l-4 border-green-400"><div class="flex items-center gap-2"><span class="font-bold text-gray-800">${r.from}</span><span class="text-gray-400 text-xs">${icons.arrowRight}</span><span class="font-bold text-gray-800">${r.to}</span></div><div class="font-bold text-green-600 font-mono">${currencySymbols[splitData.currency]} ${r.amount.toFixed(2)}</div></div>`).join('');
         }
 
-        // --- 4. 氣象功能邏輯 ---
+        // --- 4. 氣象功能邏輯 (v9: Input Style Fix) ---
         const ui = {
-            btn: document.getElementById('getLocationBtn'),
-            btnText: document.getElementById('btnText'),
             loader: document.getElementById('btnLoader'),
             msg: document.getElementById('statusMsg'),
             result: document.getElementById('weatherResult'),
@@ -492,7 +485,8 @@
             tags: document.getElementById('outfitTags'),
             summary: document.getElementById('outfitSummary'),
             forecast: document.getElementById('forecastContainer'),
-            dateDisplay: document.getElementById('dateDisplay')
+            dateDisplay: document.getElementById('dateDisplay'),
+            manualInput: document.getElementById('manualCityInput')
         };
 
         const weatherCodes = {
@@ -503,8 +497,6 @@
         };
 
         function setWeatherState(loading, msg) {
-            ui.btn.disabled = loading;
-            ui.btnText.textContent = loading ? "分析數據中..." : "重新分析";
             ui.loader.style.display = loading ? "inline-block" : "none";
             ui.msg.textContent = msg;
             if (loading) {
@@ -513,90 +505,60 @@
             }
         }
 
-        function playChime() {
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const now = ctx.currentTime;
-            [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.value = freq;
-                gain.gain.setValueAtTime(0, now + i*0.1);
-                gain.gain.linearRampToValueAtTime(0.05, now + i*0.1 + 0.1);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + i*0.1 + 1.2);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start(now + i*0.1);
-                osc.stop(now + i*0.1 + 1.5);
-            });
-        }
-
-        function generateOutfitAdvice(temp, apparentTemp, rainProb, windSpeed, aqi, weatherCode) {
-            let tags = [];
-            let summary = "";
-            if (apparentTemp >= 30) {
-                tags.push({text: "短袖/無袖", icon: "fa-shirt", color: "text-orange-300"});
-                tags.push({text: "透氣材質", icon: "fa-wind", color: "text-blue-200"});
-                summary = "天氣非常炎熱，請穿著輕薄透氣的衣物，避免中暑。";
-            } else if (apparentTemp >= 25) {
-                tags.push({text: "短袖", icon: "fa-shirt", color: "text-yellow-200"});
-                tags.push({text: "薄防曬", icon: "fa-sun", color: "text-orange-200"});
-                summary = "天氣溫暖舒適，短袖搭配一件薄襯衫或薄外套即可。";
-            } else if (apparentTemp >= 20) {
-                tags.push({text: "薄長袖/七分袖", icon: "fa-user-tag", color: "text-green-200"});
-                tags.push({text: "薄外套", icon: "fa-layer-group", color: "text-green-200"});
-                summary = "體感舒適微涼，建議穿著薄長袖，或短袖外搭一件薄夾克。";
-            } else if (apparentTemp >= 15) {
-                tags.push({text: "夾克/帽T", icon: "fa-vest", color: "text-blue-200"});
-                tags.push({text: "長褲", icon: "fa-socks", color: "text-blue-200"});
-                summary = "稍有涼意，建議穿著大學T、帽T或夾克，避免著涼。";
-            } else {
-                tags.push({text: "厚外套/羽絨", icon: "fa-snowflake", color: "text-blue-100"});
-                tags.push({text: "圍巾", icon: "fa-scarf", color: "text-purple-200"});
-                summary = "天氣寒冷，請務必做好保暖，建議穿著保暖外套與圍巾。";
+        async function manualSearch() {
+            const city = ui.manualInput.value.trim();
+            if(!city) return ui.msg.textContent = "請輸入城市名稱";
+            
+            setWeatherState(true, `搜尋 ${city} 中...`);
+            
+            try {
+                // 使用 Nominatim 搜尋城市座標
+                const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=1`);
+                const geoData = await geoRes.json();
+                
+                if(geoData && geoData.length > 0) {
+                    const lat = geoData[0].lat;
+                    const lon = geoData[0].lon;
+                    const name = city; 
+                    ui.locName.innerHTML = `<i class="fa-solid fa-location-dot text-blue-400"></i> ${name}`;
+                    fetchWeatherData(lat, lon);
+                } else {
+                    setWeatherState(false, "找不到該城市，請輸入英文 (如: Bangkok)");
+                }
+            } catch(e) {
+                setWeatherState(false, "搜尋失敗，請檢查網路");
             }
-            if (rainProb >= 40 || (weatherCode >= 50 && weatherCode <= 99)) {
-                tags.push({text: "務必帶傘", icon: "fa-umbrella", color: "text-blue-400", important: true});
-                summary += " 降雨機率高，出門請記得攜帶雨具。";
-            } else if (rainProb >= 20) {
-                tags.push({text: "摺疊傘備用", icon: "fa-umbrella", color: "text-slate-300"});
-            }
-            if (windSpeed >= 20) tags.push({text: "防風外套", icon: "fa-wind", color: "text-gray-300"});
-            if (aqi > 100) {
-                tags.push({text: "戴口罩", icon: "fa-mask-face", color: "text-red-400", important: true});
-                summary += " 空氣品質不佳，敏感族群請配戴口罩。";
-            }
-            if (weatherCode <= 1 && apparentTemp > 20) tags.push({text: "墨鏡/帽子", icon: "fa-glasses", color: "text-yellow-400"});
-            return { tags, summary };
         }
 
         async function startWeatherProcess() {
-            setWeatherState(true, "正在定位並獲取氣象數據...");
+            setWeatherState(true, "正在定位...");
+            
             if (!navigator.geolocation) {
-                useIpFallback("瀏覽器不支援 GPS，使用 IP 定位");
+                ui.msg.textContent = "瀏覽器不支援 GPS";
                 return;
             }
-            navigator.geolocation.getCurrentPosition(
-                pos => fetchWeatherData(pos.coords.latitude, pos.coords.longitude),
-                err => {
-                    console.warn(err);
-                    useIpFallback("GPS 權限受阻，切換至 IP 網路定位");
-                },
-                { timeout: 4000 }
-            );
-        }
 
-        async function useIpFallback(msg) {
-            ui.msg.textContent = msg;
-            try {
-                const r = await fetch('https://ipapi.co/json/');
-                if(!r.ok) throw new Error();
-                const d = await r.json();
-                if(d.city) ui.locName.innerHTML = `<i class="fa-solid fa-location-dot text-blue-400"></i> ${d.city} <span class="text-xs text-slate-400">氣象顧問</span>`;
-                fetchWeatherData(d.latitude, d.longitude);
-            } catch(e) {
-                setWeatherState(false, "定位失敗，請檢查網路連線。");
-            }
+            navigator.geolocation.getCurrentPosition(
+                async pos => {
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+                    
+                    try {
+                        const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&zoom=10`);
+                        const geoData = await geoRes.json();
+                        const city = geoData.address.city || geoData.address.town || "GPS 位置";
+                        ui.locName.innerHTML = `<i class="fa-solid fa-location-dot text-blue-400"></i> ${city}`;
+                        ui.manualInput.value = city;
+                    } catch(e) {
+                        ui.locName.innerHTML = `<i class="fa-solid fa-location-dot text-blue-400"></i> GPS 位置`;
+                    }
+                    fetchWeatherData(lat, lon);
+                },
+                err => {
+                    setWeatherState(false, "GPS 定位失敗，請手動輸入");
+                },
+                { enableHighAccuracy: true, timeout: 5000 }
+            );
         }
 
         async function fetchWeatherData(lat, lon) {
@@ -612,7 +574,7 @@
                 setWeatherState(false, "分析完成");
             } catch(e) {
                 console.error(e);
-                setWeatherState(false, "資料下載失敗，請稍後重試");
+                setWeatherState(false, "資料下載失敗");
             }
         }
 
@@ -656,7 +618,45 @@
             ui.result.classList.add('fade-in');
         }
         
-        // 初始化日期
+        function generateOutfitAdvice(temp, apparentTemp, rainProb, windSpeed, aqi, weatherCode) {
+            let tags = [];
+            let summary = "";
+            if (apparentTemp >= 30) {
+                tags.push({text: "短袖/無袖", icon: "fa-shirt", color: "text-orange-300"});
+                tags.push({text: "透氣材質", icon: "fa-wind", color: "text-blue-200"});
+                summary = "天氣非常炎熱，請穿著輕薄透氣的衣物，避免中暑。";
+            } else if (apparentTemp >= 25) {
+                tags.push({text: "短袖", icon: "fa-shirt", color: "text-yellow-200"});
+                tags.push({text: "薄防曬", icon: "fa-sun", color: "text-orange-200"});
+                summary = "天氣溫暖舒適，短袖搭配一件薄襯衫或薄外套即可。";
+            } else if (apparentTemp >= 20) {
+                tags.push({text: "薄長袖/七分袖", icon: "fa-user-tag", color: "text-green-200"});
+                tags.push({text: "薄外套", icon: "fa-layer-group", color: "text-green-200"});
+                summary = "體感舒適微涼，建議穿著薄長袖，或短袖外搭一件薄夾克。";
+            } else if (apparentTemp >= 15) {
+                tags.push({text: "夾克/帽T", icon: "fa-vest", color: "text-blue-200"});
+                tags.push({text: "長褲", icon: "fa-socks", color: "text-blue-200"});
+                summary = "稍有涼意，建議穿著大學T、帽T或夾克，避免著涼。";
+            } else {
+                tags.push({text: "厚外套/羽絨", icon: "fa-snowflake", color: "text-blue-100"});
+                tags.push({text: "圍巾", icon: "fa-scarf", color: "text-purple-200"});
+                summary = "天氣寒冷，請務必做好保暖，建議穿著保暖外套與圍巾。";
+            }
+            if (rainProb >= 40 || (weatherCode >= 50 && weatherCode <= 99)) {
+                tags.push({text: "務必帶傘", icon: "fa-umbrella", color: "text-blue-400", important: true});
+                summary += " 降雨機率高，出門請記得攜帶雨具。";
+            } else if (rainProb >= 20) {
+                tags.push({text: "摺疊傘備用", icon: "fa-umbrella", color: "text-slate-300"});
+            }
+            if (windSpeed >= 20) tags.push({text: "防風外套", icon: "fa-wind", color: "text-gray-300"});
+            if (aqi > 100) {
+                tags.push({text: "戴口罩", icon: "fa-mask-face", color: "text-red-400", important: true});
+                summary += " 空氣品質不佳，敏感族群請配戴口罩。";
+            }
+            if (weatherCode <= 1 && apparentTemp > 20) tags.push({text: "墨鏡/帽子", icon: "fa-glasses", color: "text-yellow-400"});
+            return { tags, summary };
+        }
+
         (function initDate() {
             const now = new Date();
             ui.dateDisplay.textContent = now.toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
@@ -666,7 +666,6 @@
         function switchTab(day) {
             playSound();
             currentDay = day;
-            
             const tabs = ['1129', '1130', 'split', 'weather'];
             const activeClass = "bg-purple-900 border-amber-400 text-amber-100 shadow-lg shadow-purple-900/40 transform scale-105";
             const inactiveClass = "bg-white border-amber-100 text-amber-800 hover:bg-amber-100 hover:border-amber-300";
@@ -687,42 +686,34 @@
             const mainBody = document.getElementById('main-body');
             const navContainer = document.getElementById('nav-container');
 
-            // 隱藏所有
             itineraryView.style.display = 'none';
             splitView.style.display = 'none';
             weatherView.style.display = 'none';
             
-            // 恢復預設樣式
             mainBody.className = "bg-amber-50 min-h-screen pb-24 selection:bg-amber-200";
             navContainer.className = "sticky top-0 z-50 bg-amber-50/95 backdrop-blur-md shadow-md border-b border-amber-200 transition-colors duration-500";
 
             if (day === 'split') {
                 splitView.classList.remove('hidden');
                 splitView.style.display = 'block';
-                mainHeader.style.display = 'block'; // 顯示圖片
+                mainHeader.style.display = 'block';
                 renderSplitView();
             } else if (day === 'weather') {
-                // 氣象模式特殊樣式
                 weatherView.classList.remove('hidden');
                 weatherView.style.display = 'flex';
-                mainHeader.style.display = 'none'; // 隱藏圖片以騰出空間
-                
-                // 改變背景為深色漸層
+                mainHeader.style.display = 'none';
                 mainBody.className = "min-h-screen pb-24 text-white";
                 mainBody.style.background = "linear-gradient(135deg, #0f172a 0%, #334155 100%)";
-                // 改變導覽列樣式以配合深色
                 navContainer.className = "sticky top-0 z-50 bg-slate-800/80 backdrop-blur-md shadow-md border-b border-slate-700 transition-colors duration-500";
             } else {
                 itineraryView.style.display = 'block';
-                mainHeader.style.display = 'block'; // 顯示圖片
-                // 恢復背景
+                mainHeader.style.display = 'block';
                 mainBody.style.background = ""; 
                 renderItinerary();
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // --- 初始化 ---
         window.onload = function() {
             renderItinerary();
         };
