@@ -49,10 +49,8 @@
 
     <!-- Header Image Section -->
     <div class="relative w-full h-72 md:h-96 overflow-hidden shadow-2xl bg-gray-900 border-b-4 border-amber-400 group">
-        <!-- Wrap with anchor tag for Google Maps link -->
         <a href="https://www.google.com/maps/search/?api=1&query=Bangkok" target="_blank" class="block w-full h-full relative cursor-pointer" onclick="playSound()" title="點擊開啟曼谷地圖">
             <div class="absolute inset-0 flex items-center justify-center">
-                <!-- 圖片處理：加入 onerror 事件處理 -->
                 <img 
                     id="header-img"
                     src="image.png" 
@@ -69,7 +67,6 @@
                     Bangkok Trip
                     <span class="block text-xl md:text-3xl mt-2 text-amber-400">November 2025</span>
                 </h1>
-                <!-- Hint text -->
                 <p class="mt-3 text-xs text-amber-200/60 font-sans tracking-widest flex items-center justify-center gap-1 group-hover:text-amber-100 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                     點擊開啟地圖
@@ -80,23 +77,117 @@
 
     <!-- Navigation Tabs -->
     <div class="sticky top-0 z-50 bg-amber-50/95 backdrop-blur-md shadow-md border-b border-amber-200">
-        <div class="flex justify-center p-3 gap-6 max-w-md mx-auto">
-            <button id="tab-1129" onclick="switchTab('11/29')" class="flex-1 py-2 px-4 rounded-full font-serif font-bold text-lg transition-all duration-300 border-2 bg-purple-900 border-amber-400 text-amber-100 shadow-lg shadow-purple-900/40 transform scale-105">
+        <div class="flex justify-center p-3 gap-3 max-w-lg mx-auto overflow-x-auto">
+            <button id="tab-1129" onclick="switchTab('11/29')" class="flex-1 py-2 px-3 rounded-xl font-serif font-bold text-base md:text-lg transition-all duration-300 border-2 whitespace-nowrap bg-purple-900 border-amber-400 text-amber-100 shadow-lg shadow-purple-900/40 transform scale-105">
                 11/29
             </button>
-            <button id="tab-1130" onclick="switchTab('11/30')" class="flex-1 py-2 px-4 rounded-full font-serif font-bold text-lg transition-all duration-300 border-2 bg-white border-amber-100 text-amber-800 hover:bg-amber-100 hover:border-amber-300">
+            <button id="tab-1130" onclick="switchTab('11/30')" class="flex-1 py-2 px-3 rounded-xl font-serif font-bold text-base md:text-lg transition-all duration-300 border-2 whitespace-nowrap bg-white border-amber-100 text-amber-800 hover:bg-amber-100 hover:border-amber-300">
                 11/30
+            </button>
+            <button id="tab-split" onclick="switchTab('split')" class="flex-1 py-2 px-3 rounded-xl font-serif font-bold text-base md:text-lg transition-all duration-300 border-2 whitespace-nowrap bg-white border-amber-100 text-amber-800 hover:bg-amber-100 hover:border-amber-300 flex items-center justify-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="16" y1="18" x2="16" y2="18"/><line x1="12" y1="18" x2="12" y2="18"/><line x1="8" y1="18" x2="8" y2="18"/></svg>
+                分帳
             </button>
         </div>
     </div>
 
-    <!-- Main Content Container -->
-    <div id="itinerary-container" class="max-w-2xl mx-auto px-4 mt-8 space-y-8">
-        <!-- Javascript will inject content here -->
+    <!-- Container for Itinerary -->
+    <div id="itinerary-view" class="max-w-2xl mx-auto px-4 mt-8 space-y-8"></div>
+
+    <!-- Container for Split Bill -->
+    <div id="split-view" class="hidden max-w-2xl mx-auto px-4 mt-8 space-y-6 pb-24">
+        
+        <!-- 1. Settings / Users -->
+        <div class="bg-white rounded-2xl shadow-md p-5 border border-amber-100">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-serif font-bold text-purple-900">分帳設定</h3>
+                <select id="currency-select" onchange="updateCurrency()" class="bg-amber-50 border border-amber-200 text-amber-900 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block p-2">
+                    <option value="THB">泰銖 (THB)</option>
+                    <option value="TWD">台幣 (TWD)</option>
+                    <option value="JPY">日幣 (JPY)</option>
+                    <option value="KRW">韓幣 (KRW)</option>
+                    <option value="USD">美元 (USD)</option>
+                    <option value="EUR">歐元 (EUR)</option>
+                </select>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-bold text-gray-700 mb-2">新增成員</label>
+                <div class="flex gap-2">
+                    <input type="text" id="new-user-input" placeholder="輸入名字 (例如: Tom)" class="flex-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5">
+                    <button onclick="addUser()" class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 scale-click">新增</button>
+                </div>
+            </div>
+            
+            <div id="user-list" class="flex flex-wrap gap-2">
+                <!-- User tags will be injected here -->
+            </div>
+        </div>
+
+        <!-- 2. Add Expense -->
+        <div class="bg-white rounded-2xl shadow-md p-5 border border-amber-100">
+            <h3 class="text-xl font-serif font-bold text-purple-900 mb-4">新增支出</h3>
+            <div class="grid grid-cols-1 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">項目名稱</label>
+                    <input type="text" id="expense-desc" placeholder="例如: 晚餐、計程車" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">金額</label>
+                    <input type="number" id="expense-amount" placeholder="0" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">誰先墊付 (可複選)</label>
+                    <div id="payer-selection-container" class="flex flex-wrap gap-2 p-2 bg-gray-50 rounded-lg border border-gray-200 min-h-[50px]">
+                        <span class="text-gray-400 text-sm py-1">請先新增成員</span>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-1">* 選擇多人時，系統會自動平分墊付金額</p>
+                </div>
+                <button onclick="addExpense()" class="w-full text-white bg-amber-500 hover:bg-amber-600 focus:ring-4 focus:ring-amber-300 font-bold rounded-lg text-sm px-5 py-3 mt-2 scale-click shadow-md">
+                    加入帳目
+                </button>
+            </div>
+        </div>
+
+        <!-- 3. Expense List -->
+        <div class="bg-white rounded-2xl shadow-md p-5 border border-amber-100">
+            <h3 class="text-xl font-serif font-bold text-purple-900 mb-4 flex items-center justify-between">
+                支出明細
+                <span id="total-amount-display" class="text-sm bg-amber-100 text-amber-800 py-1 px-3 rounded-full">總計: 0</span>
+            </h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-500">
+                    <thead class="text-xs text-gray-700 uppercase bg-amber-50">
+                        <tr>
+                            <th scope="col" class="px-3 py-3 rounded-l-lg">項目</th>
+                            <th scope="col" class="px-3 py-3">付款人</th>
+                            <th scope="col" class="px-3 py-3">金額</th>
+                            <th scope="col" class="px-3 py-3 rounded-r-lg text-right">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expense-list-body">
+                        <!-- Expenses will be injected here -->
+                        <tr class="bg-white border-b"><td colspan="4" class="px-3 py-4 text-center text-gray-400">目前沒有支出紀錄</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 4. Settlement Result -->
+        <div class="bg-gradient-to-br from-purple-50 to-amber-50 rounded-2xl shadow-lg p-6 border border-purple-100">
+            <h3 class="text-xl font-serif font-bold text-purple-900 mb-2">結算結果</h3>
+            <p class="text-sm text-gray-500 mb-4">系統會自動計算每人應付金額，並建議最佳轉帳方式。</p>
+            
+            <div id="settlement-result" class="space-y-3">
+                <!-- Settlement items injected here -->
+                <div class="text-center text-gray-400 py-4">請先輸入成員與支出資料</div>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        // --- 資料設定 ---
+        // --- 核心資料 ---
         const itineraryData = {
             '11/29': [
                 { time: "09:00 - 09:30", title: "崖差蒙空寺 Wat Yai Chai Mongkhon", type: "culture", icon: "camera", location: "Wat Yai Chai Mongkhon Ayutthaya", desc: "大城府最古老的寺廟之一，必看巨大臥佛。" },
@@ -133,6 +224,19 @@
             { id: 5, text: "沐浴盥洗用品", sub: "Toiletries" }
         ];
 
+        // --- 分帳系統資料 ---
+        // 注意：v4 更新資料結構以支援多人付款 (payers is array)
+        // 為了相容性，這裡會讀取舊資料並嘗試顯示
+        let splitData = JSON.parse(localStorage.getItem('bangkok_trip_split_data_v4')) || {
+            currency: 'THB',
+            users: [],
+            expenses: [] // { desc, amount, payers: ['A', 'B'] }
+        };
+        const currencySymbols = { 'THB': '฿', 'TWD': 'NT$', 'JPY': '¥', 'KRW': '₩', 'USD': '$', 'EUR': '€' };
+        
+        // 暫存選中的墊付人 (新增支出時使用)
+        let selectedPayers = [];
+
         // --- SVG Icons ---
         const icons = {
             clock: `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
@@ -145,15 +249,15 @@
             moon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`,
             mapPin: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
             alert: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
-            check: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+            check: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+            trash: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,
+            arrowRight: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`
         };
 
         // --- 狀態管理 ---
         let currentDay = '11/29';
-        // 從 LocalStorage 讀取已勾選項目，若無則為空物件
         let checkedItems = JSON.parse(localStorage.getItem('bangkok_trip_checklist_2025')) || {};
 
-        // --- 音效功能 ---
         function playSound() {
             try {
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -161,26 +265,20 @@
                     const audioCtx = new AudioContext();
                     const oscillator = audioCtx.createOscillator();
                     const gainNode = audioCtx.createGain();
-                    
                     oscillator.type = 'triangle';
                     oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
                     oscillator.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.15);
-                    
                     gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
                     gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-                    
                     oscillator.connect(gainNode);
                     gainNode.connect(audioCtx.destination);
-                    
                     oscillator.start();
                     oscillator.stop(audioCtx.currentTime + 0.15);
                 }
-            } catch (e) {
-                console.error("Audio not supported");
-            }
+            } catch (e) { console.error("Audio not supported"); }
         }
 
-        // --- 樣式輔助函式 ---
+        // --- 行程渲染邏輯 (與舊版相同) ---
         function getTypeColor(type) {
             switch (type) {
                 case 'food': return 'bg-orange-100 text-orange-700 border-orange-200';
@@ -192,21 +290,18 @@
             }
         }
 
-        // --- 渲染函式 ---
         function renderItinerary() {
-            const container = document.getElementById('itinerary-container');
-            container.innerHTML = ''; // 清空內容
+            const container = document.getElementById('itinerary-view');
+            container.innerHTML = ''; 
+
+            if (currentDay === 'split') return;
 
             const items = itineraryData[currentDay];
-            
-            // 渲染行程卡片
             items.forEach((item, index) => {
                 const card = document.createElement('div');
-                // 加上 fade-in 動畫與樣式
                 card.className = `group relative bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-md border-l-4 border-l-amber-500 border-y border-r border-amber-100 hover:shadow-2xl hover:border-l-purple-600 transition-all duration-300 transform hover:-translate-y-1 fade-in`;
-                card.style.animationDelay = `${index * 0.05}s`; // 瀑布流動畫效果
+                card.style.animationDelay = `${index * 0.05}s`;
 
-                // 地點列表的 HTML
                 let subListHTML = '';
                 if (item.subList) {
                     const listItems = item.subList.map(sub => 
@@ -246,12 +341,10 @@
                 container.appendChild(card);
             });
 
-            // 如果是 11/30，渲染 Checklist
             if (currentDay === '11/30') {
                 renderChecklist(container);
             }
 
-            // 渲染結束標記
             const endMarker = document.createElement('div');
             endMarker.className = "text-center py-10 opacity-60 fade-in";
             endMarker.style.animationDelay = "0.5s";
@@ -270,7 +363,6 @@
             const checklistContainer = document.createElement('div');
             checklistContainer.className = "mt-8 bg-amber-100/80 rounded-xl p-6 border-2 border-amber-400 border-dashed relative overflow-hidden shadow-lg fade-in";
             
-            // Header
             const header = `
                 <div class="flex items-center gap-3 mb-6 pb-4 border-b border-amber-300/50">
                     <div class="bg-purple-900 text-white p-2.5 rounded-full shadow-md">${icons.alert}</div>
@@ -281,7 +373,6 @@
                 </div>
             `;
 
-            // List
             const list = document.createElement('ul');
             list.className = "grid grid-cols-1 md:grid-cols-2 gap-4";
 
@@ -308,20 +399,14 @@
                     </div>
                 `;
 
-                // 點擊事件
                 li.onclick = () => {
                     playSound();
-                    // Toggle state
                     if (checkedItems[item.id]) {
                         delete checkedItems[item.id];
                     } else {
                         checkedItems[item.id] = true;
                     }
-                    // Save to local storage
                     localStorage.setItem('bangkok_trip_checklist_2025', JSON.stringify(checkedItems));
-                    // Re-render checklist (為了簡單，我們重新渲染整個頁面清單部分，或者只更新 class)
-                    // 這裡為了保持動畫流暢，我們直接重新渲染整個清單區塊比較簡單，但為了使用者體驗，最好只變更樣式
-                    // 重新渲染整個行程是比較簡單的做法，但會閃爍，所以我們手動更新這個元素的 class
                     updateListItemStyle(li, item.id);
                 };
                 list.appendChild(li);
@@ -332,53 +417,307 @@
             container.appendChild(checklistContainer);
         }
 
-        // 輔助更新清單樣式 (避免重繪整個區塊)
         function updateListItemStyle(element, id) {
             const isChecked = checkedItems[id];
             element.className = `flex items-center gap-3 p-3 rounded-lg border shadow-sm cursor-pointer transition-all duration-300 select-none scale-click ${
                 isChecked ? 'bg-green-50 border-green-200 shadow-inner' : 'bg-white/60 border-amber-200/50 hover:bg-white hover:shadow-md'
             }`;
-            
             const checkbox = element.querySelector('div:first-child');
             checkbox.className = `flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
                 isChecked ? 'bg-green-500 border-green-500 scale-110' : 'bg-transparent border-gray-400'
             }`;
             checkbox.innerHTML = isChecked ? `<span class="text-white">${icons.check}</span>` : '';
-
             const title = element.querySelector('span:nth-of-type(1)');
             title.className = `block font-bold font-serif text-lg transition-all duration-300 ${
                 isChecked ? 'text-green-800 line-through decoration-green-500/50 opacity-70' : 'text-amber-900'
             }`;
-
             const sub = element.querySelector('span:nth-of-type(2)');
             sub.className = `block text-xs font-sans transition-colors ${
                 isChecked ? 'text-green-600/70' : 'text-amber-600/80'
             }`;
         }
 
-        // --- Tab 切換 ---
         function switchTab(day) {
             playSound();
             currentDay = day;
             
-            // 更新 Tab 樣式
-            const btn1129 = document.getElementById('tab-1129');
-            const btn1130 = document.getElementById('tab-1130');
-            
+            const tabs = ['1129', '1130', 'split'];
             const activeClass = "bg-purple-900 border-amber-400 text-amber-100 shadow-lg shadow-purple-900/40 transform scale-105";
             const inactiveClass = "bg-white border-amber-100 text-amber-800 hover:bg-amber-100 hover:border-amber-300";
 
-            if (day === '11/29') {
-                btn1129.className = `flex-1 py-2 px-4 rounded-full font-serif font-bold text-lg transition-all duration-300 border-2 ${activeClass}`;
-                btn1130.className = `flex-1 py-2 px-4 rounded-full font-serif font-bold text-lg transition-all duration-300 border-2 ${inactiveClass}`;
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (!btn) return;
+                const isSelected = (t === 'split' && day === 'split') || (t === '1129' && day === '11/29') || (t === '1130' && day === '11/30');
+                let baseClass = "flex-1 py-2 px-3 rounded-xl font-serif font-bold text-base md:text-lg transition-all duration-300 border-2 whitespace-nowrap";
+                if (t === 'split') baseClass += " flex items-center justify-center gap-1";
+                btn.className = `${baseClass} ${isSelected ? activeClass : inactiveClass}`;
+            });
+
+            const itineraryView = document.getElementById('itinerary-view');
+            const splitView = document.getElementById('split-view');
+
+            if (day === 'split') {
+                itineraryView.style.display = 'none';
+                splitView.classList.remove('hidden');
+                splitView.style.display = 'block';
+                renderSplitView(); // 初始化分帳畫面
             } else {
-                btn1129.className = `flex-1 py-2 px-4 rounded-full font-serif font-bold text-lg transition-all duration-300 border-2 ${inactiveClass}`;
-                btn1130.className = `flex-1 py-2 px-4 rounded-full font-serif font-bold text-lg transition-all duration-300 border-2 ${activeClass}`;
+                splitView.style.display = 'none';
+                itineraryView.style.display = 'block';
+                renderItinerary();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- 分帳系統邏輯 (v4: 複選付款人) ---
+
+        function saveSplitData() {
+            localStorage.setItem('bangkok_trip_split_data_v4', JSON.stringify(splitData));
+            renderSplitView();
+        }
+
+        function renderSplitView() {
+            // 1. 初始化幣別
+            document.getElementById('currency-select').value = splitData.currency;
+            
+            // 2. 渲染成員列表
+            const userList = document.getElementById('user-list');
+            userList.innerHTML = splitData.users.map(u => 
+                `<div class="flex items-center gap-1 bg-purple-100 text-purple-800 text-sm font-medium px-3 py-1 rounded-full border border-purple-200">
+                    ${u}
+                    <button onclick="removeUser('${u}')" class="ml-1 text-purple-400 hover:text-purple-600">×</button>
+                </div>`
+            ).join('') || '<span class="text-gray-400 text-sm italic">尚未新增成員</span>';
+
+            // 3. 渲染付款人選單 (按鈕形式，支援複選)
+            renderPayerSelection();
+
+            // 4. 渲染支出列表
+            const expenseListBody = document.getElementById('expense-list-body');
+            const symbol = currencySymbols[splitData.currency];
+            let total = 0;
+            
+            if (splitData.expenses.length === 0) {
+                expenseListBody.innerHTML = `<tr class="bg-white border-b"><td colspan="4" class="px-3 py-4 text-center text-gray-400">目前沒有支出紀錄</td></tr>`;
+            } else {
+                expenseListBody.innerHTML = splitData.expenses.map((exp, idx) => {
+                    total += parseFloat(exp.amount);
+                    // 檢查 payer 是字串還是陣列 (相容舊版)
+                    let payersDisplay = Array.isArray(exp.payers) ? exp.payers.join(', ') : (exp.payer || '?');
+                    
+                    return `
+                    <tr class="bg-white border-b hover:bg-amber-50/50 transition-colors">
+                        <td class="px-3 py-3 font-medium text-gray-900">${exp.desc}</td>
+                        <td class="px-3 py-3">${payersDisplay}</td>
+                        <td class="px-3 py-3 font-mono">${symbol} ${exp.amount}</td>
+                        <td class="px-3 py-3 text-right">
+                            <button onclick="removeExpense(${idx})" class="text-red-400 hover:text-red-600 p-1 hover:bg-red-50 rounded transition-colors">${icons.trash}</button>
+                        </td>
+                    </tr>`;
+                }).join('');
+            }
+            document.getElementById('total-amount-display').innerText = `總計: ${symbol} ${total}`;
+
+            // 5. 計算並渲染結算結果
+            calculateSettlement();
+        }
+
+        // 新增：渲染付款人選取按鈕
+        function renderPayerSelection() {
+            const container = document.getElementById('payer-selection-container');
+            if (splitData.users.length === 0) {
+                container.innerHTML = '<span class="text-gray-400 text-sm py-1">請先新增成員</span>';
+                return;
+            }
+            
+            container.innerHTML = splitData.users.map(u => {
+                const isSelected = selectedPayers.includes(u);
+                return `
+                <button onclick="togglePayer('${u}')" class="px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 border border-transparent shadow-sm scale-click ${
+                    isSelected 
+                    ? 'bg-amber-500 text-white shadow-amber-500/30' 
+                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                }">
+                    ${u}
+                </button>`;
+            }).join('');
+        }
+
+        function togglePayer(name) {
+            playSound();
+            if (selectedPayers.includes(name)) {
+                selectedPayers = selectedPayers.filter(p => p !== name);
+            } else {
+                selectedPayers.push(name);
+            }
+            renderPayerSelection();
+        }
+
+        function updateCurrency() {
+            const select = document.getElementById('currency-select');
+            splitData.currency = select.value;
+            saveSplitData();
+        }
+
+        function addUser() {
+            const input = document.getElementById('new-user-input');
+            const name = input.value.trim();
+            if (name && !splitData.users.includes(name)) {
+                splitData.users.push(name);
+                input.value = '';
+                saveSplitData();
+                playSound();
+            } else if (splitData.users.includes(name)) {
+                alert('成員已存在');
+            }
+        }
+
+        function removeUser(name) {
+            // 檢查支出紀錄
+            const hasExpense = splitData.expenses.some(e => {
+                if (Array.isArray(e.payers)) return e.payers.includes(name);
+                return e.payer === name;
+            });
+            
+            if (hasExpense) {
+                if(!confirm(`成員 ${name} 有支出紀錄，刪除將會移除相關帳目，確定嗎？`)) return;
+                splitData.expenses = splitData.expenses.filter(e => {
+                     if (Array.isArray(e.payers)) return !e.payers.includes(name);
+                     return e.payer !== name;
+                });
+            }
+            splitData.users = splitData.users.filter(u => u !== name);
+            // 清理暫存選取
+            selectedPayers = selectedPayers.filter(u => u !== name);
+            
+            saveSplitData();
+        }
+
+        function addExpense() {
+            const desc = document.getElementById('expense-desc').value.trim();
+            const amount = parseFloat(document.getElementById('expense-amount').value);
+
+            if (!desc || isNaN(amount)) {
+                alert('請完整填寫項目與金額');
+                return;
+            }
+            if (selectedPayers.length === 0) {
+                alert('請至少選擇一位付款人');
+                return;
             }
 
-            // 滾動到頂部並重新渲染
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            renderItinerary();
+            // v4 結構: desc, amount, payers (array)
+            splitData.expenses.push({ 
+                desc, 
+                amount, 
+                payers: [...selectedPayers] // 複製陣列
+            });
+            
+            // 清空輸入與選取
+            document.getElementById('expense-desc').value = '';
+            document.getElementById('expense-amount').value = '';
+            selectedPayers = [];
+            
+            saveSplitData();
+            playSound();
+        }
+
+        function removeExpense(index) {
+            splitData.expenses.splice(index, 1);
+            saveSplitData();
+        }
+
+        function calculateSettlement() {
+            const container = document.getElementById('settlement-result');
+            const users = splitData.users;
+            const expenses = splitData.expenses;
+            const symbol = currencySymbols[splitData.currency];
+
+            if (users.length < 2 || expenses.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-400 py-4">資料不足，無法結算</div>';
+                return;
+            }
+
+            // 1. 計算每人餘額 (正 = 應收, 負 = 應付)
+            let balances = {};
+            users.forEach(u => balances[u] = 0);
+            
+            let totalSpent = 0;
+            expenses.forEach(e => {
+                const amt = parseFloat(e.amount);
+                totalSpent += amt;
+                
+                // 處理付款人 (多人平分墊付額)
+                const payersList = Array.isArray(e.payers) ? e.payers : [e.payer];
+                const amountPerPayer = amt / payersList.length;
+                
+                payersList.forEach(p => {
+                    if (balances[p] !== undefined) {
+                        balances[p] += amountPerPayer;
+                    }
+                });
+            });
+
+            // 所有人平均分攤總消費
+            const average = totalSpent / users.length;
+            users.forEach(u => balances[u] -= average);
+
+            // 2. 分類債務人與債權人
+            let debtors = [];
+            let creditors = [];
+            users.forEach(u => {
+                const b = balances[u];
+                if (b < -0.01) debtors.push({ name: u, amount: b }); // 欠錢
+                if (b > 0.01) creditors.push({ name: u, amount: b }); // 被欠錢
+            });
+
+            debtors.sort((a, b) => a.amount - b.amount); // 欠最多排前面
+            creditors.sort((a, b) => b.amount - a.amount); // 借最多排前面
+
+            // 3. 配對結算
+            let results = [];
+            let i = 0; 
+            let j = 0; 
+
+            while (i < debtors.length && j < creditors.length) {
+                let debtor = debtors[i];
+                let creditor = creditors[j];
+                
+                // 取兩者絕對值較小者為交易金額
+                let amount = Math.min(Math.abs(debtor.amount), creditor.amount);
+                
+                results.push({
+                    from: debtor.name,
+                    to: creditor.name,
+                    amount: amount
+                });
+
+                // 更新餘額
+                debtor.amount += amount;
+                creditor.amount -= amount;
+
+                if (Math.abs(debtor.amount) < 0.01) i++;
+                if (creditor.amount < 0.01) j++;
+            }
+
+            // 4. 渲染結果
+            if (results.length === 0) {
+                container.innerHTML = '<div class="text-center text-green-600 font-bold py-4">帳目已平衡，無需轉帳！</div>';
+            } else {
+                container.innerHTML = results.map(r => `
+                    <div class="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm border-l-4 border-green-400">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-gray-800">${r.from}</span>
+                            <span class="text-gray-400 text-xs">${icons.arrowRight}</span>
+                            <span class="font-bold text-gray-800">${r.to}</span>
+                        </div>
+                        <div class="font-bold text-green-600 font-mono">
+                            ${symbol} ${r.amount.toFixed(2)}
+                        </div>
+                    </div>
+                `).join('');
+            }
         }
 
         // --- 初始化 ---
@@ -389,3 +728,4 @@
     </script>
 </body>
 </html>
+
